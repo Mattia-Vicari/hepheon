@@ -13,9 +13,11 @@ TEST_FLAGS = -Wall -Wextra -O0 -fprofile-arcs -ftest-coverage
 ifeq ($(OS_NAME), Darwin)
 FRAMEWORKS = -framework Cocoa -framework OpenGL -framework IOKit
 LIBS = -lglfw3 -lglm
+LCOV_IGNORE = --ignore-errors inconsistent
 else
 FRAMEWORKS =
 LIBS = -lGL -lGLEW -lglfw
+LCOV_IGNORE =
 endif
 
 clean:
@@ -45,7 +47,7 @@ coverage:
 	gcov -o ./$(TEST_DIR) src/*.cpp 
 
 coverage_report:
-	cd $(TEST_DIR) && lcov --capture --directory . --output-file coverage.info --ignore-errors inconsistent 
+	cd $(TEST_DIR) && lcov --capture --directory . --output-file coverage.info $(LCOV_IGNORE) 
 	cd $(TEST_DIR) && lcov --extract coverage.info '*/src/*' --output-file coverage.info
 	cd $(TEST_DIR) && genhtml coverage.info --output-directory report 
 
