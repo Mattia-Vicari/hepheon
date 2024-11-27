@@ -34,13 +34,7 @@ class UI {
         }
     }
 
-    void check_click(int x, int y) {
-        for (Button button : buttons) {
-            if (button.hit(x, y)) {
-                std::cout << "Button clicked!" << std::endl;
-            }
-        }
-    }
+    void check_click(int x, int y);
 };
 
 }  // namespace ui

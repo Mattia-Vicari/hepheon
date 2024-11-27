@@ -1,21 +1,55 @@
+OS_NAME := $(shell uname -s)
+
 CXX = g++ -std=c++20
 SRCS = $(shell find src -name "*.cpp")
-LIBS = -lglfw3 -lglm
 INCLUDES = -Iinclude
-FRAMEWORKS = -framework Cocoa -framework OpenGL -framework IOKit
 
 DEBUG_DIR = build/debug
-DEBUG_FLAGS = -Wall -Wextra -O0 
+TEST_DIR = test/build
 
+DEBUG_FLAGS = -Wall -Wextra -O0 
+TEST_FLAGS = -Wall -Wextra -O0 -fprofile-arcs -ftest-coverage
+
+ifeq ($(OS_NAME), Darwin)
+FRAMEWORKS = -framework Cocoa -framework OpenGL -framework IOKit
+LIBS = -lglfw3 -lglm
+else
+FRAMEWORKS =
+LIBS = -lGL -lGLEW -lglfw
+endif
 
 clean:
 	rm -rf $(DEBUG_DIR)/main
+	rm -rf $(TEST_DIR)/*
 
 build_debug:
-	$(CXX) $(DEBUG_FLAGS) $(LIBS) $(FRAMEWORKS) $(INCLUDES) -o $(DEBUG_DIR)/main $(SRCS)
+	$(CXX) $(DEBUG_FLAGS) $(LIBS) $(FRAMEWORKS) $(INCLUDES) -o $(DEBUG_DIR)/main $(SRCS) main.cpp
 
 run_debug:
 	./$(DEBUG_DIR)/main
 
 debug: clean build_debug run_debug
 
+linux_env:
+	sudo apt-get update && sudo apt-get install -y xorg-dev libgl1-mesa-dev libglu1-mesa-dev mesa-common-dev xvfb
+	sudo apt-get update && sudo apt-get install -y libglew-dev libglfw3 libglfw3-dev libglm-dev 
+	sudo apt-get update && sudo apt-get install -y lcov
+
+build_test:
+	$(CXX) $(TEST_FLAGS) $(LIBS) $(FRAMEWORKS) $(INCLUDES) -o $(TEST_DIR)/test $(shell find test -name "*.cpp") $(SRCS)
+
+coverage:
+	./$(TEST_DIR)/test
+	gcov -o ./$(TEST_DIR) src/*.cpp 
+
+coverage_report:
+	cd $(TEST_DIR) && lcov --capture --directory . --output-file coverage.info --ignore-errors inconsistent 
+	cd $(TEST_DIR) && lcov --extract coverage.info '*/src/*' --output-file coverage.info
+	cd $(TEST_DIR) && genhtml coverage.info --output-directory report 
+
+open_coverage_report:
+	cd $(TEST_DIR)/report && open index.html
+
+run_test: clean build_test coverage coverage_report
+
+run_test_report: clean test coverage coverage_report open_coverage_report
