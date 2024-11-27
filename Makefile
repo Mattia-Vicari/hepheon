@@ -50,6 +50,6 @@ coverage_report:
 open_coverage_report:
 	cd $(TEST_DIR)/report && open index.html
 
-run_test: clean build_test coverage coverage_report
+test: clean build_test coverage coverage_report
 
 run_test_report: clean test coverage coverage_report open_coverage_report

@@ -30,7 +30,7 @@ jobs:
     - name: Run test suite
       run: |
         export DISPLAY=:99
-        make full_test 
+        make test 
         lcov --list test/build/coverage.info
 
     - name: Upload coverage reports to Codecov
