@@ -23,6 +23,7 @@ clean:
 	rm -rf $(TEST_DIR)/*
 
 build_debug:
+	@mkdir -p $(DEBUG_DIR)
 	$(CXX) $(DEBUG_FLAGS) $(LIBS) $(FRAMEWORKS) $(INCLUDES) -o $(DEBUG_DIR)/main $(SRCS) main.cpp
 
 run_debug:
@@ -36,6 +37,7 @@ linux_env:
 	sudo apt-get update && sudo apt-get install -y lcov
 
 build_test:
+	@mkdir -p $(TEST_DIR)
 	$(CXX) $(TEST_FLAGS) $(LIBS) $(FRAMEWORKS) $(INCLUDES) -o $(TEST_DIR)/test $(shell find test -name "*.cpp") $(SRCS)
 
 coverage:
