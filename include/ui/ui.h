@@ -14,26 +14,38 @@ class UI {
     std::vector<Panel> panels;
     std::vector<Button> buttons;
 
+    /**
+     * @brief Construct a new UI object.
+     */
     UI() {};
 
-    void add_panel(Panel panel) {
-        panels.push_back(panel);
-    }
+    /**
+     * @brief Add a panel to the UI.
+     * 
+     * @param[in] panel The panel to add.
+     */
+    void add_panel(Panel panel);
 
-    void add_button(Button button) {
-        buttons.push_back(button);
-    }
+    /**
+     * @brief Add a button to the UI.
+     * 
+     * @param[in] button The button to add.
+     */
+    void add_button(Button button);
 
-    void draw(const GLuint ui_program) {
-        for (Panel panel : panels) {
-            panel.draw(ui_program);
-        }
+    /**
+     * @brief Draw the UI.
+     * 
+     * @param[in] ui_program The program to use for drawing the UI.
+     */
+    void draw(const GLuint ui_program);
 
-        for (Button button : buttons) {
-            button.draw(ui_program);
-        }
-    }
-
+    /**
+     * @brief Check if a button was clicked.
+     * 
+     * @param[in] x The x coordinate of the click.
+     * @param[in] y The y coordinate of the click.
+     */
     void check_click(int x, int y);
 };
 
