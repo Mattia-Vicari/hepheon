@@ -1,16 +1,10 @@
 #ifndef __UI_PANEL_H__
 #define __UI_PANEL_H__
 
-#if defined (__APPLE_CC__)
-#define GL_SILENCE_DEPRECATION
-#include <OpenGL/gl3.h>
-#else
-#include <GL/glew.h> 
-#endif
-
 #include <map>
 #include <glm/glm.hpp>
 
+#include "opengl.h"
 namespace ui {
 
 enum class Anchor {
@@ -25,7 +19,7 @@ enum class Anchor {
     BOTTOM_RIGHT
 };
 
-std::map<Anchor, glm::vec2> anchor_map = {
+static std::map<Anchor, glm::vec2> anchor_map = {
     {Anchor::TOP_LEFT, glm::vec2(-1, 1)},
     {Anchor::TOP, glm::vec2(0, 1)},
     {Anchor::TOP_RIGHT, glm::vec2(1, 1)},

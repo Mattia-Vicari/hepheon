@@ -1,28 +1,23 @@
-#if defined (__APPLE_CC__)
-#define GL_SILENCE_DEPRECATION
-#include <OpenGL/gl3.h>
-#else
-#include <GL/glew.h> 
-#endif
-
-#define GLFW_INCLUDE_GLCOREARB
-#include <GLFW/glfw3.h>
-
-#include <glm/glm.hpp>
-
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <string>
 
-#include <ui/ui.h>
-#include <ui/panel.h>
-#include <ui/button.h>
+// needs to be before glfw include to suppress deprecation warnings
+#include "opengl.h"
+
+#define GLFW_INCLUDE_GLCOREARB
+#include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+
+#include "ui/ui.h"
+#include "ui/panel.h"
+#include "ui/button.h"
 
 const int WIDTH = 1080;
 const int HEIGHT = 720;
 const bool FULLSCREEN = false;
-const char* WINDOW_TITLE = "Universa";
+const char* WINDOW_TITLE = "Hepheon";
 
 
 std::string read_shader_source(const char *file_path) {
