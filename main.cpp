@@ -5,16 +5,13 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
+#include "app/settings.h"
+#include "app/ui.h"
+
 #include "error.h"
 #include "shaders/compiler.h"
 #include "ui/ui.h"
-#include "ui/panel.h"
-#include "ui/button.h"
 
-const int WIDTH = 1080;
-const int HEIGHT = 720;
-const bool FULLSCREEN = false;
-const char* WINDOW_TITLE = "Hepheon";
 
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
@@ -54,10 +51,10 @@ int main() {
 
     GLFWwindow* window;
 
-    if (FULLSCREEN) {
-        window = glfwCreateWindow(WIDTH, HEIGHT, WINDOW_TITLE, glfwGetPrimaryMonitor(), NULL);
+    if (app::FULLSCREEN) {
+        window = glfwCreateWindow(app::WIDTH, app::HEIGHT, app::WINDOW_TITLE, glfwGetPrimaryMonitor(), NULL);
     } else {
-        window = glfwCreateWindow(WIDTH, HEIGHT, WINDOW_TITLE, NULL, NULL);
+        window = glfwCreateWindow(app::WIDTH, app::HEIGHT, app::WINDOW_TITLE, NULL, NULL);
     }
     
     if (!window) {
@@ -85,38 +82,8 @@ int main() {
         "src/shaders/ui_fragment_shader.glsl"
     );
 
-    ui::Panel panel = ui::Panel(
-        glm::vec3(0, -1, 0),
-        glm::vec3(0.2, 0.0, 0.0),
-        glm::ivec2(2*WIDTH, 200),
-        0,
-        ui::Anchor::BOTTOM,
-        glm::vec2(2*WIDTH, 2*HEIGHT)
-    );
-
-    ui::Button button = ui::Button(
-        glm::vec3(0, 0, -0.1),
-        glm::vec3(0.0f, 1.0f, 0.0f),
-        glm::ivec2(200, 100),
-        25,
-        ui::Anchor::CENTER,
-        glm::vec2(2*WIDTH, 2*HEIGHT)
-    );
-
-    ui::Button button2 = ui::Button(
-        glm::vec3(0, 0.5, -0.1),
-        glm::vec3(0.0f, 0.0f, 1.0f),
-        glm::ivec2(200, 100),
-        25,
-        ui::Anchor::CENTER,
-        glm::vec2(2*WIDTH, 2*HEIGHT)
-    );
-
-
     ui::UI ui;
-    ui.add_panel(panel);
-    ui.add_button(button);
-    ui.add_button(button2);
+    app::populate_ui(&ui);
 
     glfwSetWindowUserPointer(window, &ui);
 
