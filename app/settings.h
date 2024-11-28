@@ -3,10 +3,10 @@
 
 namespace app {
 
-const int WIDTH = 1080;
-const int HEIGHT = 720;
-const bool FULLSCREEN = false;
-const char* WINDOW_TITLE = "Hepheon";
+static const int WIDTH = 1080;
+static const int HEIGHT = 720;
+static const bool FULLSCREEN = false;
+static const char* WINDOW_TITLE = "Hepheon";
 
 }  // namespace app
 
