@@ -1,5 +1,6 @@
 #include "app.h"
 
+
 void app::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
     // Press ESC
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
