@@ -1,5 +1,5 @@
-#ifndef __MYOPENGL_H__
-#define __MYOPENGL_H__
+#ifndef __OPENGL_H__
+#define __OPENGL_H__
 
 #if defined (__APPLE_CC__)
 #define GL_SILENCE_DEPRECATION
