@@ -1,6 +1,8 @@
 #ifndef __APP_H__ 
 #define __APP_H__
 
+#include "opengl.h"
+
 #include <GLFW/glfw3.h>
 
 #include "../app/settings.h"
