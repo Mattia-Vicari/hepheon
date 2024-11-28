@@ -17,6 +17,7 @@ class Button : Panel {
      * @param[in] rel_size The relative size of the button.
      * @param[in] radius The radius of the button.
      * @param[in] anchor The anchor of the button.
+     * @param[in] framebuffer_size The size of the framebuffer.
      * @param[in] window_size The size of the window.
      */
     Button(
@@ -25,6 +26,7 @@ class Button : Panel {
         glm::ivec2 rel_size,
         int radius,
         Anchor anchor,
+        glm::vec2 framebuffer_size,
         glm::vec2 window_size
     );
 
@@ -43,6 +45,29 @@ class Button : Panel {
      * @return true if the button was clicked, false otherwise.
      */
     bool hit(const int x, const int y);
+
+    /**
+     * @brief Resize the button.
+     * 
+     * @param[in] window_size The new size of the window.
+     * @param[in] framebuffer_size The new size of the framebuffer.
+     */
+    void resize(glm::ivec2 window_size, glm::ivec2 framebuffer_size);
+
+    /**
+     * @brief Set the callback function for the button.
+     * 
+     * @param[in] callback The callback function to set.
+     */
+    void set_callback(std::function<void()> callback);
+
+    /**
+     * @brief Execute the callback function.
+     */
+    void execute_callback();
+ 
+ private:
+    std::function<void()> callback;
 };
 
 }  // namespace ui

@@ -25,7 +25,18 @@ void ui::UI::draw(const GLuint ui_program) {
 void ui::UI::check_click(int x, int y) {
     for (Button button : buttons) {
         if (button.hit(x, y)) {
-            std::cout << "Button clicked!" << std::endl;
+            button.execute_callback();
         }
+    }
+}
+
+
+void ui::UI::resize(glm::ivec2 window_size, glm::ivec2 framebuffer_size) {
+    for (Panel& panel : panels) {
+        panel.resize(window_size, framebuffer_size);
+    }
+
+    for (Button& button : buttons) {
+        button.resize(window_size, framebuffer_size);
     }
 }

@@ -6,6 +6,8 @@
 #define GLFW_INCLUDE_GLCOREARB
 #include <GLFW/glfw3.h>
 
+#include <glm/glm.hpp>
+
 #include "../app/settings.h"
 
 #include "error.h"
@@ -33,6 +35,15 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
  * @param[in] mods Bit field describing which modifier keys were held down.
  */
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
+
+/**
+ * @brief Callback for window resize events.
+ * 
+ * @param[in] window The window that was resized.
+ * @param[in] width The new width of the window.
+ * @param[in] height The new height of the window.
+ */
+void framebuffer_resize_callback(GLFWwindow* window, int width, int height);
 
 class App {
  public:

@@ -46,11 +46,11 @@ class Panel {
     int radius;
     glm::vec2 anchor_pos;
 
-    glm::vec2 window_size;  // This is actually the framebuffer size
+    glm::vec2 framebuffer_size;
     glm::ivec2 screen_pos;  // Needed for hit detection
         
-    float scale_x = 0.5;  // should be computed as window_width / framebuffer_width 
-    float scale_y = 0.5;  // should be computed as window_height / framebuffer_height
+    float scale_x; 
+    float scale_y;
 
     /**
      * @brief Construct a new Panel object with relative position and absolute size
@@ -60,6 +60,7 @@ class Panel {
      * @param[in] size The size of the panel in pixels.
      * @param[in] radius The radius of the panel corners.
      * @param[in] anchor The anchor point of the panel.
+     * @param[in] framebuffer_size The size of the framebuffer.
      * @param[in] window_size The size of the window.
      */
     Panel(
@@ -68,6 +69,7 @@ class Panel {
         glm::ivec2 size,
         int radius,
         Anchor anchor,
+        glm::vec2 framebuffer_size,
         glm::vec2 window_size
     );
 
@@ -112,6 +114,14 @@ class Panel {
      * @param[in] ui_program The program to use for drawing the panel.
      */
     void draw(const GLuint ui_program);
+
+    /**
+     * @brief Resize the panel.
+     * 
+     * @param[in] window_size The new size of the window.
+     * @param[in] framebuffer_size The new size of the framebuffer.
+     */
+    void resize(glm::ivec2 window_size, glm::ivec2 framebuffer_size);
 
  private:
     float vertex_buffer[24];

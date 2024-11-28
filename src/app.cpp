@@ -25,6 +25,25 @@ void app::mouse_button_callback(GLFWwindow* window, int button, int action, int 
 }
 
 
+void app::framebuffer_resize_callback(GLFWwindow* window, int width, int height) {
+    ui::UI* ui = (ui::UI*) glfwGetWindowUserPointer(window);
+
+    if (ui == nullptr) {
+        return;
+    }
+
+    int window_width;
+    int window_height;
+
+    glfwGetWindowSize(window, &window_width, &window_height);
+
+    ui->resize(
+        glm::ivec2(window_width, window_height),
+        glm::ivec2(width, height)
+    );
+}
+
+
 app::App::App() {
     if (!glfwInit()) {
         error("Impossible to initialize glfw.");
@@ -51,6 +70,7 @@ app::App::App() {
 
     glfwSetKeyCallback(window, key_callback);
     glfwSetMouseButtonCallback(window, mouse_button_callback);
+    glfwSetFramebufferSizeCallback(window, framebuffer_resize_callback);
 
     glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
     glfwSwapInterval(0);
@@ -78,11 +98,6 @@ void app::App::attach_ui(ui::UI* ui) {
 void app::App::run(const unsigned int ui_program) {
     while (!glfwWindowShouldClose(window)) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        int width;
-        int height;
-
-        glfwGetWindowSize(window, &width, &height);
 
         ui->draw(ui_program);
 

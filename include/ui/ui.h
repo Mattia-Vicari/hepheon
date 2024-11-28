@@ -47,6 +47,14 @@ class UI {
      * @param[in] y The y coordinate of the click.
      */
     void check_click(int x, int y);
+
+    /**
+     * @brief Resize the UI.
+     * 
+     * @param[in] window_size The new size of the window.
+     * @param[in] framebuffer_size The new size of the framebuffer.
+     */
+    void resize(glm::ivec2 window_size, glm::ivec2 framebuffer_size);
 };
 
 }  // namespace ui

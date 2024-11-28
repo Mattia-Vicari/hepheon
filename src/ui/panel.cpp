@@ -7,9 +7,18 @@ ui::Panel::Panel(
     glm::ivec2 size,
     int radius,
     Anchor anchor,
+    glm::vec2 framebuffer_size,
     glm::vec2 window_size
-) : color(color), rel_pos(pos), abs_size(size), radius(radius), window_size(window_size) {
+) : color(color),
+    rel_pos(pos),
+    abs_size(size),
+    radius(radius),
+    framebuffer_size(framebuffer_size) {
+
     anchor_pos = anchor_map[anchor];
+    scale_x = window_size.x / framebuffer_size.x;
+    scale_y = window_size.y / framebuffer_size.y;
+
     compute_rel_size();
     compute_abs_pos();
     setup_buffers();
@@ -40,19 +49,22 @@ void ui::Panel::setup_buffers() {
 
 
 void ui::Panel::compute_rel_size() {
-    rel_size = glm::vec2((float) abs_size.x / window_size.x, (float) abs_size.y / window_size.y);
+    rel_size = glm::vec2(
+        (float) abs_size.x / framebuffer_size.x, 
+        (float) abs_size.y / framebuffer_size.y
+    );
 }
 
 
 void ui::Panel::compute_abs_size() {
-    abs_size = glm::ivec2(rel_size.x * window_size.x, rel_size.y * window_size.y);
+    abs_size = glm::ivec2(rel_size.x * framebuffer_size.x, rel_size.y * framebuffer_size.y);
 }
 
 
 void ui::Panel::compute_abs_pos() {
     abs_pos = glm::ivec2(
-        (rel_pos.x + 1) * window_size.x / 2,
-        (rel_pos.y + 1) * window_size.y / 2
+        (rel_pos.x + 1) * framebuffer_size.x / 2,
+        (rel_pos.y + 1) * framebuffer_size.y / 2
     );
 }
 
@@ -60,7 +72,7 @@ void ui::Panel::compute_abs_pos() {
 void ui::Panel::compute_screen_pos() {
     screen_pos = glm::ivec2(
         (abs_pos.x - anchor_pos.x * abs_size.x) * scale_x,
-        window_size.y * scale_y - (abs_pos.y - anchor_pos.y * abs_size.y) * scale_y
+        (framebuffer_size.y - (abs_pos.y - anchor_pos.y * abs_size.y)) * scale_y
     );
 }
 
@@ -133,4 +145,16 @@ void ui::Panel::draw(const GLuint ui_program) {
 
     // Unbind and swap buffers
     glBindVertexArray(0);
+}
+#include <iostream>
+
+void ui::Panel::resize(glm::ivec2 window_size, glm::ivec2 framebuffer_size) {
+    this->framebuffer_size = framebuffer_size;
+    scale_x = (float) window_size.x / framebuffer_size.x;
+    scale_y = (float) window_size.y / framebuffer_size.y;
+
+    // keep abs_size and rel_pos fixed
+    compute_rel_size();
+    compute_abs_pos();
+    compute_screen_pos();
 }

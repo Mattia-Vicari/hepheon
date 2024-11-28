@@ -21,7 +21,8 @@ inline void populate_ui(ui::UI* ui) {
         glm::ivec2(2*WIDTH, 200),
         0,
         ui::Anchor::BOTTOM,
-        glm::vec2(2*WIDTH, 2*HEIGHT)
+        glm::vec2(2*WIDTH, 2*HEIGHT),
+        glm::vec2(WIDTH, HEIGHT)
     );
 
     ui::Button button = ui::Button(
@@ -30,8 +31,13 @@ inline void populate_ui(ui::UI* ui) {
         glm::ivec2(200, 100),
         25,
         ui::Anchor::CENTER,
-        glm::vec2(2*WIDTH, 2*HEIGHT)
+        glm::vec2(2*WIDTH, 2*HEIGHT),
+        glm::vec2(WIDTH, HEIGHT)
     );
+
+    button.set_callback([]() {
+        std::cout << "Button 1 clicked!" << std::endl;
+    });
 
     ui::Button button2 = ui::Button(
         glm::vec3(0, 0.5, -0.1),
@@ -39,8 +45,13 @@ inline void populate_ui(ui::UI* ui) {
         glm::ivec2(200, 100),
         25,
         ui::Anchor::CENTER,
-        glm::vec2(2*WIDTH, 2*HEIGHT)
+        glm::vec2(2*WIDTH, 2*HEIGHT),
+        glm::vec2(WIDTH, HEIGHT)
     );
+
+    button2.set_callback([]() {
+        std::cout << "Button 2 clicked!" << std::endl;
+    });
 
     ui->add_panel(panel);
     ui->add_button(button);
