@@ -146,7 +146,7 @@ void ui::Panel::draw(const GLuint ui_program) {
     // Unbind and swap buffers
     glBindVertexArray(0);
 }
-#include <iostream>
+
 
 void ui::Panel::resize(glm::ivec2 window_size, glm::ivec2 framebuffer_size) {
     this->framebuffer_size = framebuffer_size;
