@@ -9,6 +9,16 @@ namespace ui {
 
 class Button : Panel {
  public:
+    /**
+     * @brief Construct a new Button object.
+     * 
+     * @param[in] rel_pos The relative position of the button.
+     * @param[in] color The color of the button.
+     * @param[in] rel_size The relative size of the button.
+     * @param[in] radius The radius of the button.
+     * @param[in] anchor The anchor of the button.
+     * @param[in] window_size The size of the window.
+     */
     Button(
         glm::vec3 rel_pos,
         glm::vec3 color,
@@ -16,20 +26,23 @@ class Button : Panel {
         int radius,
         Anchor anchor,
         glm::vec2 window_size
-    ) : Panel(rel_pos, color, rel_size, radius, anchor, window_size) {};
+    );
 
-    void draw(const GLuint ui_program) {
-        Panel::draw(ui_program);
-    }
+    /**
+     * @brief Draw the button.
+     * 
+     * @param[in] ui_program The program to use for drawing the button.
+     */
+    void draw(const GLuint ui_program);
 
-    bool hit(const int x, const int y) {
-        return (
-            x >= screen_pos.x - abs_size.x * scale_x / 2 &&
-            x <= screen_pos.x + abs_size.x * scale_x / 2 &&
-            y >= screen_pos.y - abs_size.y * scale_y / 2 &&
-            y <= screen_pos.y + abs_size.y * scale_y / 2
-        );
-    }
+    /**
+     * @brief Check if the button was clicked.
+     * 
+     * @param[in] x The x coordinate of the click.
+     * @param[in] y The y coordinate of the click.
+     * @return true if the button was clicked, false otherwise.
+     */
+    bool hit(const int x, const int y);
 };
 
 }  // namespace ui
