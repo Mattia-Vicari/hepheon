@@ -1,4 +1,3 @@
-#include <iostream>
 #include <fstream>
 #include <sstream>
 #include <string>
@@ -10,6 +9,7 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
+#include "error.h"
 #include "ui/ui.h"
 #include "ui/panel.h"
 #include "ui/button.h"
@@ -40,9 +40,9 @@ unsigned int compile(int type, const char* source) {
     glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
 
     if (!success) {
-        char infoLog[512];
-        glGetShaderInfoLog(shader, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::COMPILATION_FAILED\n" << infoLog << std::endl;
+        char info_log[512];
+        glGetShaderInfoLog(shader, 512, NULL, info_log);
+        error("Shader compilation failed", info_log);
     }
 
     return shader;
@@ -66,9 +66,9 @@ unsigned int create_program(const char* vertex_shader_path, const char* fragment
     GLint success;
     glGetProgramiv(program, GL_LINK_STATUS, &success);
     if (!success) {
-        char infoLog[512];
-        glGetProgramInfoLog(program, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
+        char info_log[512];
+        glGetProgramInfoLog(program, 512, NULL, info_log);
+        error("Shader linking failed", info_log);
     }
 
     glDeleteShader(vertex_shader);
@@ -104,7 +104,7 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 
 int main() {
     if (!glfwInit()) {
-        std::cerr << "ERROR: Impossible to initialize glfw." << std::endl;
+        error("Impossible to initialize glfw.");
     }
 
     glfwWindowHint(GLFW_SAMPLES, 4); // 4x antialiasing
@@ -122,7 +122,7 @@ int main() {
     }
     
     if (!window) {
-        std::cerr << "ERROR: Impossible to create a window." << std::endl;
+        error("Impossible to create a window.");
         glfwTerminate();
     }
 
