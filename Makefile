@@ -12,11 +12,11 @@ TEST_FLAGS = -Wall -Wextra -O0 -fprofile-arcs -ftest-coverage
 
 ifeq ($(OS_NAME), Darwin)
 FRAMEWORKS = -framework Cocoa -framework OpenGL -framework IOKit
-LIBS = -lglfw3 -lglm
+LIBS = -lglfw3 -lglm -I/opt/homebrew/include/lua -L/opt/homebrew/lib -llua 
 LCOV_IGNORE = --ignore-errors inconsistent
 else
 FRAMEWORKS =
-LIBS = -lGL -lGLEW -lglfw
+LIBS = -lGL -lGLEW -lglfw -llua5.4
 LCOV_IGNORE =
 endif
 
@@ -37,6 +37,7 @@ linux_env:
 	sudo apt-get update && sudo apt-get install -y xorg-dev libgl1-mesa-dev libglu1-mesa-dev mesa-common-dev xvfb
 	sudo apt-get update && sudo apt-get install -y libglew-dev libglfw3 libglfw3-dev libglm-dev 
 	sudo apt-get update && sudo apt-get install -y lcov
+	sudo apt-get update && sudo apt-get install -y lua5.4 liblua5.4-dev
 
 build_test:
 	@mkdir -p $(TEST_DIR)

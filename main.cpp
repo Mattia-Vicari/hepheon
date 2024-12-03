@@ -3,12 +3,16 @@
 
 #include "app.h"
 #include "logger.h"
+#include "lua/caller.h"
 #include "shaders/compiler.h"
 #include "ui/ui.h"
 
 
 int main() {
     logger::info("Welcome to Hepheon!");
+    
+    lua::init();
+
     app::App hepheon;
     ui::UI ui;
     app::populate_ui(&ui);
