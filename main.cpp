@@ -2,12 +2,13 @@
 #include "app/ui.h"
 
 #include "app.h"
-#include "error.h"
+#include "logger.h"
 #include "shaders/compiler.h"
 #include "ui/ui.h"
 
 
 int main() {
+    logger::info("Welcome to Hepheon!");
     app::App hepheon;
     ui::UI ui;
     app::populate_ui(&ui);

@@ -46,7 +46,7 @@ void app::framebuffer_resize_callback(GLFWwindow* window, int width, int height)
 
 app::App::App() {
     if (!glfwInit()) {
-        error("Impossible to initialize glfw.");
+        logger::error("Impossible to initialize glfw.");
     }
 
     glfwWindowHint(GLFW_SAMPLES, 4); // 4x antialiasing
@@ -62,7 +62,7 @@ app::App::App() {
     }
     
     if (!window) {
-        error("Impossible to create a window.");
+        logger::error("Impossible to create a window.");
         glfwTerminate();
     }
 

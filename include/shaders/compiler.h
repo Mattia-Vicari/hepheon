@@ -6,7 +6,7 @@
 #include <string>
 
 #include "opengl.h"
-#include "error.h"
+#include "logger.h"
 
 namespace shaders {
 

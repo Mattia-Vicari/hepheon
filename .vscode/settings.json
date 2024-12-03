@@ -69,6 +69,7 @@
         "utility": "cpp",
         "format": "cpp",
         "thread": "cpp",
-        "cinttypes": "cpp"
+        "cinttypes": "cpp",
+        "chrono": "cpp"
     }
 }

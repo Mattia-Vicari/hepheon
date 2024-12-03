@@ -22,7 +22,7 @@ unsigned int shaders::compile(int type, const char* source) {
     if (!success) {
         char info_log[512];
         glGetShaderInfoLog(shader, 512, NULL, info_log);
-        error("Shader compilation failed", info_log);
+        logger::error("Shader compilation failed", info_log);
     }
 
     return shader;
@@ -48,7 +48,7 @@ unsigned int shaders::create_program(const char* vertex_shader_path, const char*
     if (!success) {
         char info_log[512];
         glGetProgramInfoLog(program, 512, NULL, info_log);
-        error("Shader linking failed", info_log);
+        logger::error("Shader linking failed", info_log);
     }
 
     glDeleteShader(vertex_shader);

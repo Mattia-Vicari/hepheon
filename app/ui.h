@@ -3,6 +3,7 @@
 
 #include "settings.h"
 
+#include "logger.h"
 #include "ui/button.h"
 #include "ui/panel.h"
 #include "ui/ui.h"
@@ -36,7 +37,7 @@ inline void populate_ui(ui::UI* ui) {
     );
 
     button.set_callback([]() {
-        std::cout << "Button 1 clicked!" << std::endl;
+        logger::info("Button 1 clicked!");
     });
 
     ui::Button button2 = ui::Button(
@@ -50,7 +51,7 @@ inline void populate_ui(ui::UI* ui) {
     );
 
     button2.set_callback([]() {
-        std::cout << "Button 2 clicked!" << std::endl;
+        logger::info("Button 2 clicked!");
     });
 
     ui->add_panel(panel);

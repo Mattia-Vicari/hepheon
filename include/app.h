@@ -10,7 +10,7 @@
 
 #include "../app/settings.h"
 
-#include "error.h"
+#include "logger.h"
 #include "ui/ui.h"
 
 namespace app {
