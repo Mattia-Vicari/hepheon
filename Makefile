@@ -51,7 +51,7 @@ linux_env:
 
 build_test:
 	@mkdir -p $(TEST_DIR)
-	$(CXX) $(TEST_FLAGS) $(FRAMEWORKS) $(INCLUDES) -o $(TEST_DIR)/test $(shell find test -name "*.cpp") $(SRCS) $(LIBS)
+	$(CXX) $(TEST_FLAGS) $(FRAMEWORKS) $(INCLUDES) -o $(TEST_DIR)/test $(shell find test -name "*.cpp") $(SRCS) $(DEPS) $(LIBS)
 
 coverage:
 	./$(TEST_DIR)/test
