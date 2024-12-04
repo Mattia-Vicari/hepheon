@@ -11,7 +11,9 @@
 int main() {
     logger::info("Welcome to Hepheon!");
     
-    lua::init();
+    lua::load();
+
+    return 0; // TODO: Remove this line
 
     app::App hepheon;
     ui::UI ui;

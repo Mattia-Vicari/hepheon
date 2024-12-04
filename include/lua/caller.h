@@ -3,29 +3,30 @@
 
 #include <lua.hpp>
 
+#include "lua/bindings.h"
 #include "logger.h"
 
 namespace lua {
 
-void init() {
+inline void load() {
     lua_State* L = luaL_newstate();
     luaL_openlibs(L);
+
+    register_bindings(L);
 
     if (luaL_dofile(L, "lua/main.lua") != LUA_OK) {
         const char* error = lua_tostring(L, -1);
         logger::error(error);
-    } else {
-        logger::info("Lua main script loaded successfully!");
     }
 
-    lua_getglobal(L, "init");
+    lua_getglobal(L, "load");
 
     if (lua_pcall(L, 0, 0, 0) != LUA_OK) {
         const char* error = lua_tostring(L, -1);
         logger::error(error);
-    } else {
-        logger::info("Lua init function executed successfully!");
     }
+
+    logger::info("Lua loaded successfully!");
 
     lua_close(L);
 }
