@@ -12,10 +12,12 @@ TEST_FLAGS = -Wall -Wextra -O0 -fprofile-arcs -ftest-coverage
 
 ifeq ($(OS_NAME), Darwin)
 FRAMEWORKS = -framework Cocoa -framework OpenGL -framework IOKit
-LIBS = -lglfw3 -lglm -I/opt/homebrew/include/lua -L/opt/homebrew/lib -llua 
+INCLUDES += -I/opt/homebrew/include/lua
+LIBS = -lglfw3 -lglm -L/opt/homebrew/lib -llua 
 LCOV_IGNORE = --ignore-errors inconsistent
 else
 FRAMEWORKS =
+INCLUDES += -I/usr/include/lua5.4
 LIBS = -lGL -lGLEW -lglfw -llua5.4
 LCOV_IGNORE =
 endif
@@ -26,7 +28,7 @@ clean:
 
 build_debug:
 	@mkdir -p $(DEBUG_DIR)
-	$(CXX) $(DEBUG_FLAGS) $(LIBS) $(FRAMEWORKS) $(INCLUDES) -o $(DEBUG_DIR)/main $(SRCS) main.cpp
+	$(CXX) $(DEBUG_FLAGS) $(FRAMEWORKS) $(INCLUDES) -o $(DEBUG_DIR)/main $(SRCS) main.cpp $(LIBS) 
 
 run_debug:
 	./$(DEBUG_DIR)/main
