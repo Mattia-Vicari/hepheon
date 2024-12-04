@@ -8,6 +8,10 @@
 
 #include <glm/glm.hpp>
 
+#include "imgui.h"
+#include "backends/imgui_impl_glfw.h"
+#include "backends/imgui_impl_opengl3.h"
+
 #include "../app/settings.h"
 
 #include "logger.h"
@@ -51,7 +55,8 @@ class App {
     App();
     ~App();
     void attach_ui(ui::UI* ui);
-    void run(const unsigned int ui_program);
+    void run();
+    GLFWwindow* get_window();
 
  private:
     GLFWwindow* window;

@@ -2,7 +2,15 @@ OS_NAME := $(shell uname -s)
 
 CXX = g++ -std=c++20
 SRCS = $(shell find src -name "*.cpp")
-INCLUDES = -Iinclude
+IMGUI = deps/imgui
+DEPS = $(IMGUI)/imgui.cpp \
+	   $(IMGUI)/imgui_draw.cpp \
+	   $(IMGUI)/imgui_widgets.cpp \
+	   $(IMGUI)/imgui_tables.cpp \
+	   $(IMGUI)/imgui_demo.cpp \
+	   $(IMGUI)/backends/imgui_impl_glfw.cpp \
+	   $(IMGUI)/backends/imgui_impl_opengl3.cpp
+INCLUDES = -Iinclude -Ideps/imgui
 
 DEBUG_DIR = build/debug
 TEST_DIR = test/build
@@ -28,7 +36,7 @@ clean:
 
 build_debug:
 	@mkdir -p $(DEBUG_DIR)
-	$(CXX) $(DEBUG_FLAGS) $(FRAMEWORKS) $(INCLUDES) -o $(DEBUG_DIR)/main $(SRCS) main.cpp $(LIBS) 
+	$(CXX) $(DEBUG_FLAGS) $(FRAMEWORKS) $(INCLUDES) -o $(DEBUG_DIR)/main $(SRCS) $(DEPS) main.cpp $(LIBS) 
 
 run_debug:
 	./$(DEBUG_DIR)/main

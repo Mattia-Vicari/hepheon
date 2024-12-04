@@ -1,6 +1,10 @@
 #include "app/settings.h"
 #include "app/ui.h"
 
+#include "imgui.h"
+#include "backends/imgui_impl_glfw.h"
+#include "backends/imgui_impl_opengl3.h"
+
 #include "app.h"
 #include "logger.h"
 #include "lua/loader.h"
@@ -14,19 +18,25 @@ int main() {
     lua::load();
 
     app::App hepheon;
-    ui::UI ui;
-    app::populate_ui(&ui);
-    hepheon.attach_ui(&ui);
 
+    // Setup Dear ImGui context
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
-    unsigned int ui_program = shaders::create_program(
-        "src/shaders/ui_vertex_shader.glsl",
-        "src/shaders/ui_fragment_shader.glsl"
-    );
+    // Setup Dear ImGui style
+    ImGui::StyleColorsDark();
+    ImGui_ImplGlfw_InitForOpenGL(hepheon.get_window(), true);
+    ImGui_ImplOpenGL3_Init("#version 150");
 
-    hepheon.run(ui_program);
+    // Our state
+    bool show_demo_window = true;
+    bool show_another_window = false;
+    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-    glDeleteProgram(ui_program);
+    hepheon.run();
 
     return 0;
 }
