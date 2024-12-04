@@ -38,9 +38,9 @@ app::App::App() {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); // We don't want the old OpenGL 
 
     if (app::FULLSCREEN) {
-        window = glfwCreateWindow(app::WIDTH, app::HEIGHT, app::WINDOW_TITLE, glfwGetPrimaryMonitor(), NULL);
+        window = glfwCreateWindow(app::WIDTH, app::HEIGHT, app::WINDOW_TITLE.c_str(), glfwGetPrimaryMonitor(), NULL);
     } else {
-        window = glfwCreateWindow(app::WIDTH, app::HEIGHT, app::WINDOW_TITLE, NULL, NULL);
+        window = glfwCreateWindow(app::WIDTH, app::HEIGHT, app::WINDOW_TITLE.c_str(), NULL, NULL);
     }
     
     if (!window) {

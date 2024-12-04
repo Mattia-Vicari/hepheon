@@ -10,13 +10,9 @@
 
 #include "logger.h"
 #include "lua/loader.h"
+#include "state.h"
 
 namespace app {
-
-static int WIDTH = 1080;
-static int HEIGHT = 720;
-static bool FULLSCREEN = false;
-static const char* WINDOW_TITLE = "Hepheon";
 
 /**
  * @brief Callback for key events.
