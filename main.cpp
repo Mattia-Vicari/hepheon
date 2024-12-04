@@ -13,6 +13,8 @@ int main() {
     
     lua::load();
 
+    return 0;
+
     app::App hepheon;
     ui::UI ui;
     app::populate_ui(&ui);
