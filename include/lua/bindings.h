@@ -7,19 +7,19 @@
 
 namespace lua {
 
-int log_info(lua_State* L) {
+inline int log_info(lua_State* L) {
     const char* message = lua_tostring(L, 1);
     logger::info(message);
     return 0;
 }
 
-int log_warning(lua_State* L) {
+inline int log_warning(lua_State* L) {
     const char* message = lua_tostring(L, 1);
     logger::warning(message);
     return 0;
 }
 
-int log_error(lua_State* L) {
+inline int log_error(lua_State* L) {
     const char* message = lua_tostring(L, 1);
     logger::error(message);
     return 0;

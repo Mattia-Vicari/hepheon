@@ -1,5 +1,5 @@
-#ifndef __LUA_CALLER_H__
-#define __LUA_CALLER_H__
+#ifndef __LUA_LOADER_H__
+#define __LUA_LOADER_H__
 
 #include <lua.hpp>
 
@@ -35,4 +35,4 @@ inline void load() {
 
 
 
-#endif  // __LUA_CALLER_H__
+#endif  // __LUA_LOADER_H__

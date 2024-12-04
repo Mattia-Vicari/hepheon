@@ -3,7 +3,7 @@
 
 #include "app.h"
 #include "logger.h"
-#include "lua/caller.h"
+#include "lua/loader.h"
 #include "shaders/compiler.h"
 #include "ui/ui.h"
 
@@ -13,7 +13,7 @@ int main() {
     
     lua::load();
 
-    return 0; // TODO: Remove this line
+    //return 0; // TODO: Remove this line
 
     app::App hepheon;
     ui::UI ui;

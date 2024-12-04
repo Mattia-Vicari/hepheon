@@ -11,6 +11,7 @@
 #include "../app/settings.h"
 
 #include "logger.h"
+#include "lua/loader.h"
 #include "ui/ui.h"
 
 namespace app {
