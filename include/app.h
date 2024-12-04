@@ -1,24 +1,22 @@
 #ifndef __APP_H__ 
 #define __APP_H__
 
-#include "opengl.h"
-
-#define GLFW_INCLUDE_GLCOREARB
-#include <GLFW/glfw3.h>
-
-#include <glm/glm.hpp>
-
 #include "imgui.h"
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
-
-#include "../app/settings.h"
+#include <stdio.h>
+#define GL_SILENCE_DEPRECATION
+#include <GLFW/glfw3.h>
 
 #include "logger.h"
 #include "lua/loader.h"
-#include "ui/ui.h"
 
 namespace app {
+
+static int WIDTH = 1080;
+static int HEIGHT = 720;
+static bool FULLSCREEN = false;
+static const char* WINDOW_TITLE = "Hepheon";
 
 /**
  * @brief Callback for key events.
@@ -54,13 +52,15 @@ class App {
  public:
     App();
     ~App();
-    void attach_ui(ui::UI* ui);
     void run();
     GLFWwindow* get_window();
 
  private:
     GLFWwindow* window;
-    ui::UI* ui;
+    
+    bool show_demo_window = true;
+    bool show_another_window = false;
+    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 };
 
 }
