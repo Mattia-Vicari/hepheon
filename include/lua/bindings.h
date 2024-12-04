@@ -26,9 +26,9 @@ inline int log_error(lua_State* L) {
 }
 
 inline void register_bindings(lua_State* L) {
-    lua_register(L, "log_info", log_info);
-    lua_register(L, "log_warning", log_warning);
-    lua_register(L, "log_error", log_error);
+    lua_register(L, "c_log_info", log_info);
+    lua_register(L, "c_log_warning", log_warning);
+    lua_register(L, "c_log_error", log_error);
 }
 
 }

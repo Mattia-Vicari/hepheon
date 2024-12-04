@@ -1,5 +1,8 @@
+
 function load()
-    log_info("Hello World from lua!")
-    log_warning("This is a warning!")
-    log_error("This is an error!")
+    logger = require("lua/logger")
+
+    logger.info("Hello World from lua!")
+    logger.warning("This is a warning!")
+    logger.error("This is an error!")
 end
