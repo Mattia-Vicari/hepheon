@@ -2,12 +2,22 @@ OS_NAME := $(shell uname -s)
 
 CXX = g++ -std=c++20
 SRCS = $(shell find src -name "*.cpp")
-INCLUDES = -Iinclude
+IMGUI = deps/imgui
+DEPS = $(IMGUI)/imgui.cpp \
+	   $(IMGUI)/imgui_draw.cpp \
+	   $(IMGUI)/imgui_widgets.cpp \
+	   $(IMGUI)/imgui_tables.cpp \
+	   $(IMGUI)/imgui_demo.cpp \
+	   $(IMGUI)/backends/imgui_impl_glfw.cpp \
+	   $(IMGUI)/backends/imgui_impl_opengl3.cpp
+INCLUDES = -Iinclude -Ideps/imgui
 
 DEBUG_DIR = build/debug
+RELEASE_DIR = build/release
 TEST_DIR = test/build
 
 DEBUG_FLAGS = -Wall -Wextra -O0 
+RELEASE_FLAGS = -Wall -Wextra -O3
 TEST_FLAGS = -Wall -Wextra -O0 -fprofile-arcs -ftest-coverage
 
 ifeq ($(OS_NAME), Darwin)
@@ -24,16 +34,26 @@ endif
 
 clean:
 	rm -rf $(DEBUG_DIR)/main
+	rm -rf $(RELEASE_DIR)/main
 	rm -rf $(TEST_DIR)/*
 
 build_debug:
 	@mkdir -p $(DEBUG_DIR)
-	$(CXX) $(DEBUG_FLAGS) $(FRAMEWORKS) $(INCLUDES) -o $(DEBUG_DIR)/main $(SRCS) main.cpp $(LIBS) 
+	$(CXX) $(DEBUG_FLAGS) $(FRAMEWORKS) $(INCLUDES) -o $(DEBUG_DIR)/main $(SRCS) $(DEPS) main.cpp $(LIBS) 
 
 run_debug:
 	./$(DEBUG_DIR)/main
 
 debug: clean build_debug run_debug
+
+build_release:
+	@mkdir -p $(RELEASE_DIR)
+	$(CXX) $(RELEASE_FLAGS) $(FRAMEWORKS) $(INCLUDES) -o $(RELEASE_DIR)/main $(SRCS) $(DEPS) main.cpp $(LIBS)
+
+run_release:
+	./$(RELEASE_DIR)/main
+
+release: clean build_release run_release
 
 linux_env:
 	sudo apt-get update && sudo apt-get install -y xorg-dev libgl1-mesa-dev libglu1-mesa-dev mesa-common-dev xvfb
@@ -43,7 +63,7 @@ linux_env:
 
 build_test:
 	@mkdir -p $(TEST_DIR)
-	$(CXX) $(TEST_FLAGS) $(FRAMEWORKS) $(INCLUDES) -o $(TEST_DIR)/test $(shell find test -name "*.cpp") $(SRCS) $(LIBS)
+	$(CXX) $(TEST_FLAGS) $(FRAMEWORKS) $(INCLUDES) -o $(TEST_DIR)/test $(shell find test -name "*.cpp") $(SRCS) $(DEPS) $(LIBS)
 
 coverage:
 	./$(TEST_DIR)/test
@@ -59,4 +79,4 @@ open_coverage_report:
 
 test: clean build_test coverage coverage_report
 
-run_test_report: clean test coverage coverage_report open_coverage_report
+run_test_report: clean test open_coverage_report

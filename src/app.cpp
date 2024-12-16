@@ -1,6 +1,7 @@
 #include "app.h"
 
-
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-parameter"
 void app::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
     // Press ESC
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
@@ -17,36 +18,12 @@ void app::key_callback(GLFWwindow* window, int key, int scancode, int action, in
 void app::mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
     double xpos, ypos;
     glfwGetCursorPos(window, &xpos, &ypos);
-
-    ui::UI* ui = (ui::UI*) glfwGetWindowUserPointer(window);
-
-    if (ui == nullptr) {
-        return;
-    }
-
-    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
-        ui->check_click(xpos, ypos);
-    }
 }
 
 
 void app::framebuffer_resize_callback(GLFWwindow* window, int width, int height) {
-    ui::UI* ui = (ui::UI*) glfwGetWindowUserPointer(window);
-
-    if (ui == nullptr) {
-        return;
-    }
-
-    int window_width;
-    int window_height;
-
-    glfwGetWindowSize(window, &window_width, &window_height);
-
-    ui->resize(
-        glm::ivec2(window_width, window_height),
-        glm::ivec2(width, height)
-    );
 }
+#pragma clang diagnostic pop
 
 
 app::App::App() {
@@ -61,9 +38,9 @@ app::App::App() {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); // We don't want the old OpenGL 
 
     if (app::FULLSCREEN) {
-        window = glfwCreateWindow(app::WIDTH, app::HEIGHT, app::WINDOW_TITLE, glfwGetPrimaryMonitor(), NULL);
+        window = glfwCreateWindow(app::WIDTH, app::HEIGHT, app::WINDOW_TITLE.c_str(), glfwGetPrimaryMonitor(), NULL);
     } else {
-        window = glfwCreateWindow(app::WIDTH, app::HEIGHT, app::WINDOW_TITLE, NULL, NULL);
+        window = glfwCreateWindow(app::WIDTH, app::HEIGHT, app::WINDOW_TITLE.c_str(), NULL, NULL);
     }
     
     if (!window) {
@@ -85,28 +62,61 @@ app::App::App() {
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    // Setup Dear ImGui context
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+
+    // Setup Dear ImGui style
+    ImGui::StyleColorsDark();
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init("#version 150");
 }
 
 
 app::App::~App() {
+    // Cleanup
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+
     glfwDestroyWindow(window);
     glfwTerminate();
 }
 
 
-void app::App::attach_ui(ui::UI* ui) {
-    this->ui = ui;
-    glfwSetWindowUserPointer(window, ui);
+void app::App::run() {
+    ImGuiIO& io = ImGui::GetIO();
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+
+    while (!glfwWindowShouldClose(window)) {
+        glfwPollEvents();
+        if (glfwGetWindowAttrib(window, GLFW_ICONIFIED) != 0)
+        {
+            ImGui_ImplGlfw_Sleep(10);
+            continue;
+        }
+
+        // Start the Dear ImGui frame
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
+        // Rendering
+        ImGui::Render();
+        int display_w, display_h;
+        glfwGetFramebufferSize(window, &display_w, &display_h);
+        glViewport(0, 0, display_w, display_h);
+        glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
+        glClear(GL_COLOR_BUFFER_BIT);
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+        glfwSwapBuffers(window);
+    }
 }
 
 
-void app::App::run(const unsigned int ui_program) {
-    while (!glfwWindowShouldClose(window)) {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        ui->draw(ui_program);
-
-        glfwSwapBuffers(window);
-        glfwPollEvents();
-    }
+GLFWwindow* app::App::get_window() {
+    return window;
 }
