@@ -1,15 +1,19 @@
 #ifndef __APP_H__ 
 #define __APP_H__
 
+#include <stdio.h>
+
+#include "opengl.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 #include "imgui.h"
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
-#include <stdio.h>
-#define GL_SILENCE_DEPRECATION
-#include <GLFW/glfw3.h>
 
 #include "logger.h"
 #include "lua/loader.h"
+#include "shaders/compiler.h"
 #include "state.h"
 
 namespace app {
@@ -53,7 +57,7 @@ class App {
 
  private:
     GLFWwindow* window;
-    ImVec4 clear_color = ImVec4(0.0f, 0.0f, 0.0f, 1.0f);
+    unsigned int render_program;
 };
 
 }
