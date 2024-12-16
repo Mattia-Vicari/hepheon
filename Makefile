@@ -13,9 +13,11 @@ DEPS = $(IMGUI)/imgui.cpp \
 INCLUDES = -Iinclude -Ideps/imgui
 
 DEBUG_DIR = build/debug
+RELEASE_DIR = build/release
 TEST_DIR = test/build
 
 DEBUG_FLAGS = -Wall -Wextra -O0 
+RELEASE_FLAGS = -Wall -Wextra -O3
 TEST_FLAGS = -Wall -Wextra -O0 -fprofile-arcs -ftest-coverage
 
 ifeq ($(OS_NAME), Darwin)
@@ -32,6 +34,7 @@ endif
 
 clean:
 	rm -rf $(DEBUG_DIR)/main
+	rm -rf $(RELEASE_DIR)/main
 	rm -rf $(TEST_DIR)/*
 
 build_debug:
@@ -42,6 +45,15 @@ run_debug:
 	./$(DEBUG_DIR)/main
 
 debug: clean build_debug run_debug
+
+build_release:
+	@mkdir -p $(RELEASE_DIR)
+	$(CXX) $(RELEASE_FLAGS) $(FRAMEWORKS) $(INCLUDES) -o $(RELEASE_DIR)/main $(SRCS) $(DEPS) main.cpp $(LIBS)
+
+run_release:
+	./$(RELEASE_DIR)/main
+
+release: clean build_release run_release
 
 linux_env:
 	sudo apt-get update && sudo apt-get install -y xorg-dev libgl1-mesa-dev libglu1-mesa-dev mesa-common-dev xvfb
