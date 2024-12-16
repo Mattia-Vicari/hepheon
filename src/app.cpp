@@ -103,9 +103,6 @@ void app::App::run() {
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        ImGui::Begin("Hello, world!");
-        ImGui::End();
-
         // Rendering
         ImGui::Render();
         int display_w, display_h;
