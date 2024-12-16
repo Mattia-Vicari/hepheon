@@ -71,6 +71,9 @@ app::App::App() {
     ImGui::StyleColorsDark();
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 150");
+
+    // Compile shaders
+    render_program = shaders::create_program("src/shaders/vertex.glsl", "src/shaders/fragment.glsl");
 }
 
 
@@ -90,8 +93,90 @@ void app::App::run() {
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
+    // Shaders rendering 
+    glUseProgram(render_program);
+
+    // Create buffers for a white cube
+    float vertices[] = {
+        // Positions          // Colors (white)
+        -0.5f, -0.5f, -0.5f,   1.0f, 1.0f, 1.0f,  // Back bottom-left
+        0.5f, -0.5f, -0.5f,   1.0f, 1.0f, 1.0f,  // Back bottom-right
+        0.5f,  0.5f, -0.5f,   1.0f, 1.0f, 1.0f,  // Back top-right
+        -0.5f,  0.5f, -0.5f,   1.0f, 1.0f, 1.0f,  // Back top-left
+
+        -0.5f, -0.5f,  0.5f,   1.0f, 1.0f, 1.0f,  // Front bottom-left
+        0.5f, -0.5f,  0.5f,   1.0f, 1.0f, 1.0f,  // Front bottom-right
+        0.5f,  0.5f,  0.5f,   1.0f, 1.0f, 1.0f,  // Front top-right
+        -0.5f,  0.5f,  0.5f,   1.0f, 1.0f, 1.0f,  // Front top-left
+    };
+
+    unsigned int indices[] = {
+        // Back face
+        0, 1, 2,  // Triangle 1
+        2, 3, 0,  // Triangle 2
+
+        // Front face
+        4, 5, 6,  // Triangle 3
+        6, 7, 4,  // Triangle 4
+
+        // Left face
+        0, 3, 7,  // Triangle 5
+        7, 4, 0,  // Triangle 6
+
+        // Right face
+        1, 5, 6,  // Triangle 7
+        6, 2, 1,  // Triangle 8
+
+        // Bottom face
+        0, 1, 5,  // Triangle 9
+        5, 4, 0,  // Triangle 10
+
+        // Top face
+        3, 2, 6,  // Triangle 11
+        6, 7, 3   // Triangle 12
+    };
+
+    unsigned int vao, vbo, ebo;
+
+    glGenVertexArrays(1, &vao);
+    glGenBuffers(1, &vbo);
+    glGenBuffers(1, &ebo);
+
+    glBindVertexArray(vao);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+    // Position attribute
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    
+    // Color attribute
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+
+    glBindVertexArray(0);
+
+    // Create proj * view * model matrix
+    glm::mat4 proj = glm::perspective(glm::radians(45.0f), (float)app::WIDTH / (float)app::HEIGHT, 0.1f, 100.0f);
+    glm::mat4 view = glm::lookAt(
+        glm::vec3(0.0f, 0.0f, 3.0f),
+        glm::vec3(0.0f, 0.0f, 0.0f),
+        glm::vec3(0.0f, 1.0f, 0.0f)
+    );
+    glm::mat4 model = glm::mat4(1.0f);
+    glm::mat4 pvm = proj * view * model;
+
+    // Pass pvm in uniform buffer
+    unsigned int pvm_location = glGetUniformLocation(render_program, "pvm");
+    glUniformMatrix4fv(pvm_location, 1, GL_FALSE, &pvm[0][0]);
+
     while (!glfwWindowShouldClose(window)) {
+        glfwSwapBuffers(window);
         glfwPollEvents();
+
         if (glfwGetWindowAttrib(window, GLFW_ICONIFIED) != 0)
         {
             ImGui_ImplGlfw_Sleep(10);
@@ -103,17 +188,24 @@ void app::App::run() {
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        // Rendering
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        glBindVertexArray(vao);
+        glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+        glBindVertexArray(0);
+
+        // ImGui rendering
         ImGui::Render();
         int display_w, display_h;
         glfwGetFramebufferSize(window, &display_w, &display_h);
         glViewport(0, 0, display_w, display_h);
-        glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
-        glClear(GL_COLOR_BUFFER_BIT);
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-        glfwSwapBuffers(window);
     }
+
+    // Cleanup
+    glDeleteVertexArrays(1, &vao);
+    glDeleteBuffers(1, &vbo);
+    glDeleteBuffers(1, &ebo);
 }
 
 

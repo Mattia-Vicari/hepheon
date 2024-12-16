@@ -3,7 +3,8 @@
 
 #if defined (__APPLE_CC__)
 #define GL_SILENCE_DEPRECATION
-#include <OpenGL/gl.h>
+#include <OpenGL/gl3.h>
+#include <GLFW/glfw3.h>
 #else
 #include <GL/glew.h> 
 #endif
